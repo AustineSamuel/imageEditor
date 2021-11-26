@@ -76,6 +76,7 @@ drawImage(e);
   }
 });
 let myColor="rgb(255, 0, 0)"
+$("#show").css("background",myColor);
 
 const drawLine = (x, y, radius = 10, color = "black") => {
   memoryLine.push({
@@ -168,6 +169,7 @@ optionalColors.forEach((e)=>{
 $("#colorCtn div").click(function (){
  myColor=$(this).attr("color");
  message ("color set to"+myColor);
+ $("#show").css("background",myColor);
 });
 
 $("#text").click(function (){

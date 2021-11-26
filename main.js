@@ -49,22 +49,18 @@ function drawImage(src){
     ctx.beginPath();
    
 
-    if(imgW>canvas.height){
+    if(imgW>canvas.width){
       if( !done){
         done=true;
       swal({title:"this image require a bigger screen",
       text:"text on this image might not be visible , becouse the image sizes are bigger than your device screen please  view this file next time using a bigger screen",
-    buttons:["continue","Noted !"]});
+   
+      });
       }
-    ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
     }
-    else{
-    
-      drawImage(img,0,0,canvas.width,canvas.height);
-    }
+  ctx.drawImage(img, 0, 0,imgW,imgH);
 
-
-
+console.log(imgW,imgH);
     ctx.closePath();
   img.remove();
   }

@@ -8,80 +8,72 @@ const random = (min, max) => Math.random() * (max - min + 1) + min | 0
 const timestamp = _ => new Date().getTime()
 let ctx = canvas.getContext("2d");
 let imageDetected = false;
-const memory = []
-
-const addMemory = () =>{
-  return false;//is not working
-  memory.push(canvas);
-  let prev=canvas;
-  canvas.remove();
-  //delete the current canvas create new one and draw the prev canvas in  the new one
-  canvas=document.createElement("canvas");
-  document.body.appendChild(canvas);
-  canvas.width = innerWidth;
-  canvas.height = innerHeight
-
-  ctx = canvas.getContext("2d");
-  const img=new Image();
-  img.src=prev.toDataURL("png");
-  img.onload=()=>{
-  ctx.drawImage(img,0,0,canvas.width,canvas.height);
-  img.remove();
-  }
-  if(memory.length>=6){
-    memory.shift();
-  }
-  redoIndex=memory.length;
-}
+let memoryLine=[];
+let memory = []
 
 let redoIndex=0;
-
+let imageSrc='';
 const undo= () =>{
-  redoIndex--;
-  if(memory[redoIndex]===undefined) return message ("undo memory end");
- const img=new Image();
- img.src=memory[redoIndex].toDataURL("png");
- img.onload=()=>{
-   ctx.clearRect(0,0,canvas.width, canvas.height)
- ctx.drawImage(img,0,0,canvas.width,canvas.height);
- setTimeout(()=>{
-   img.remove();
-   console.log(redoIndex)
- })
+  if(memory.length < 1) return message ("undo memory end");
+  drawImage(imageSrc);
+memory.pop();
+setTimeout(()=>{
+memory.forEach((e)=>{//redraw canvas
+  ctx.beginPath();
+  e.forEach((el)=>{
+ ///   console.log(el.x,el.y,el.radius,el.color);
+  drawLine(el.x,el.y,el.radius,el.color);
+});
+//ctx.closePath();
+})
+},0);
+
  }
-}
+
 ctx.font="15px arial";
 ctx.fillText("EDITOR V 1 , please Choose jpg, png, jpeg image of answer papper ",canvas.width/8,canvas.height/3);
+function drawImage(src){
+  const img = new Image();
+  img.src = src;
+  img.onload = () => {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+   
+    ctx.beginPath();
+   
+    ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+    ctx.closePath();
+  img.remove();
+  }
+}
 
-$("input").on("change", function() {
+$("#image").on("change", function() {
   imageReader($(this), $(this), done);
 
   function done(e) {
 imageDetected=true;
-
-    const img = new Image();
-    img.src = e;
-    img.onload = () => {
-      ctx.beginPath();
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      ctx.closePath();
-      img.remove();
-    }
-
+imageSrc=e;
+drawImage(e);
   }
 });
-let myColor="#00FF46"
+let myColor="rgb(255, 0, 0)"
 
 const drawLine = (x, y, radius = 10, color = "black") => {
+  memoryLine.push({
+    x:x,
+    y:y,
+    radius:radius,
+    color:color
+  });
+ 
+
  ctx.lineTo(Math.floor(x), Math.floor(y))
   ctx.strokeStyle = color
   ctx.lineWidth = radius/4;
   ctx.lineCap = "round"
   ctx.lineJoin = "round"
-  ctx.strokeStyle = myColor;
-  ctx.fillStyle = myColor,
-  ctx.shadowColor=myColor;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color,
+  ctx.shadowColor=color;
   ctx.shadowBlur=radius
     ctx.stroke();
     
@@ -92,7 +84,7 @@ const handleTouch=(e)=>{
   const x=e.touches[0].clientX
   
   const y=e.touches[0].clientY;
-  drawLine(x,y,2)
+  drawLine(x,y,2,myColor)
   
 }
 
@@ -102,19 +94,24 @@ const handleMouse = (e) =>{
   if(!imageDetected) return message ('choose image first');
 const X = e.clientX;
 const Y = e.clientY;
-drawLine(X,Y,2);
+drawLine(X,Y,2,myColor);
  }
 
  let onDraw=false;
  canvas.addEventListener("mousedown",(e)=>{
 onDraw=true;
-console.log(onDraw)
+
  });
  
  canvas.addEventListener("mouseup",()=>{
 onDraw=false;
 ctx.beginPath();
-addMemory();
+memory.push(memoryLine);
+ 
+setTimeout(() => {
+  memoryLine=[];  
+  console.log(memory);
+}, 0);
 });
 
 canvas.addEventListener("mousemove",handleMouse);
@@ -124,7 +121,7 @@ canvas.addEventListener("touchmove",handleTouch)
 canvas.addEventListener("touchstart",handleTouch)
 canvas.addEventListener("touchend", function (){
  ctx.beginPath()
- addMemory()
+ 
 });
 
 
@@ -133,7 +130,7 @@ function changeColor(color){
 }
 
 
-const optionalColors=["#00FCFF","#00FF46","#FF2300","#FF8C00","#D100FF","#000000","#ffffff","#E6FF00","#45463C"]
+const optionalColors= ["rgb(255, 0, 0)","rgb(0, 60, 255)","rgb(0, 255, 40)"]
 
 optionalColors.forEach((e)=>{
   $("#colorCtn").append(`<div color="${e}"" style="background:${e}">
@@ -154,13 +151,19 @@ $("#text").click(function (){
 });
 
 function erase(){
-  if(confirm("are you sure you want to clear canvas ?")){
-    imageDetected=false;
+  swal({
+    title:"are you want to erase this canvas ? this action will clear all your work !!",
+    text:"restart work gain",
+    buttons:["cancel","Clear"]
+  }).then((e)=>{
+   if(e){
+      imageDetected=false;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-  }
-  else{
+   }
+   else{
     message ("back again");
-  }
+   }
+  })
 }
 
 

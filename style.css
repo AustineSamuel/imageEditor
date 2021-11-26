@@ -63,8 +63,9 @@ nav button{
   
 }
 nav button:hover{
- background: #CFFFFD;
+ background: #3cfff8;
+color:rgb(0, 153, 146);
 }
-/* ["#00FCFF","#00FF46","#FF2300","#FF8C00","#D100FF","#000000","#ffffff","#E6FF00",#45463C]
+/*,"#FF8C00","#D100FF","#000000","#ffffff","#E6FF00",#45463C]
 
 */

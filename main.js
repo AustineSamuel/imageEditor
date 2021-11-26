@@ -10,7 +10,7 @@ let ctx = canvas.getContext("2d");
 let imageDetected = false;
 let memoryLine=[];
 let memory = []
-
+let thick=2;
 let redoIndex=0;
 let imageSrc='';
 const undo= () =>{
@@ -36,11 +36,33 @@ function drawImage(src){
   const img = new Image();
   img.src = src;
   img.onload = () => {
+    imgW=img.width;
+    imgH=img.height;
+    
+    
+
+
+
+
     ctx.clearRect(0,0,canvas.width,canvas.height);
    
     ctx.beginPath();
    
+
+    if(imgW>canvas.height){
+      swal({title:"this image require a bigger screen",
+      text:"text on this image might not be visible , becouse the image sizes are bigger than your device screen please  view this file next time using a bigger screen",
+    buttons:["continue","Noted !"]});
+   
     ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+    }
+    else{
+    
+      drawImage(img,0,0,canvas.width,canvas.height);
+    }
+
+
+
     ctx.closePath();
   img.remove();
   }
@@ -74,7 +96,7 @@ const drawLine = (x, y, radius = 10, color = "black") => {
   ctx.strokeStyle = color;
   ctx.fillStyle = color,
   ctx.shadowColor=color;
-  ctx.shadowBlur=radius
+  ctx.shadowBlur=radius> 3 ? radius / 3 : radius >4 ? 1 : radius;
     ctx.stroke();
     
 }
@@ -84,7 +106,7 @@ const handleTouch=(e)=>{
   const x=e.touches[0].clientX
   
   const y=e.touches[0].clientY;
-  drawLine(x,y,2,myColor)
+  drawLine(x,y,thick,myColor)
   
 }
 
@@ -94,7 +116,7 @@ const handleMouse = (e) =>{
   if(!imageDetected) return message ('choose image first');
 const X = e.clientX;
 const Y = e.clientY;
-drawLine(X,Y,2,myColor);
+drawLine(X,Y,thick,myColor);
  }
 
  let onDraw=false;
@@ -140,7 +162,7 @@ function changeColor(color){
 const optionalColors= ["rgb(255, 0, 0)","rgb(0, 60, 255)","rgb(0, 255, 40)"]
 
 optionalColors.forEach((e)=>{
-  $("#colorCtn").append(`<div color="${e}"" style="background:${e}">
+  $("#colorCtn").prepend(`<div color="${e}"" style="background:${e}">
   
   </div>`)
 })
@@ -201,3 +223,11 @@ $(window).on('unload', function() {
 $("html").css({
   "touch-action": "pan-down"
 });
+
+
+$("#range").on("change",function(){
+  thick=Number($(this).val());
+
+  $("#show").css("width",thick).css("height",thick).css("border-radius",thick/2);
+
+})

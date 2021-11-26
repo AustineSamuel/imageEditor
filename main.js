@@ -121,7 +121,14 @@ canvas.addEventListener("touchmove",handleTouch)
 canvas.addEventListener("touchstart",handleTouch)
 canvas.addEventListener("touchend", function (){
  ctx.beginPath()
+ onDraw=false;
+ctx.beginPath();
+memory.push(memoryLine);
  
+setTimeout(() => {
+  memoryLine=[];  
+  console.log(memory);
+}, 0);
 });
 
 

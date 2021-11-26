@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="lib/jquery3.js"></script>
+<script src="lib/MfunctionsLap.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="lib/w3css.css" type="text/css" media="all" />
+<link rel="stylesheet" href="lib/cssLibrary.css" type="text/css" media="all" />
+  <title>Editor</title>
+  
+  <!-- HTML -->
+  
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <input type="file" name="" id="image" value="" hidden/>
+  <nav class="flexBetween w3-padding fixed">
+    <button>
+    <label for="image" class="fa fa-photo">
+   </label>
+   </button>
+   
+   <button class="fa fa-pencil w3-light-blue"></button>
+   <button onclick="undo()" class="fa fa-undo"></button>
+   <button onclick="erase()" class="fa fa-trash"></button>
+   <button onclick="expt()" class="fa fa-save"></button>
+   
+    </nav>
+      
+  <canvas>
+    
+    
+  </canvas>
+  
+  <div id="btm" class="fixed">
+    <div id="colorCtn" class="flexRound">
+      
+      </div>
+    </div>
+      
+  <!-- Project -->
+  <script src="main.js"></script>
+</body>
+</html>

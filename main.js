@@ -50,10 +50,11 @@ function drawImage(src){
    
 
     if(imgW>canvas.height){
+      if( !imageDetected){
       swal({title:"this image require a bigger screen",
       text:"text on this image might not be visible , becouse the image sizes are bigger than your device screen please  view this file next time using a bigger screen",
     buttons:["continue","Noted !"]});
-   
+      }
     ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
     }
     else{

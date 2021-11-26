@@ -15,9 +15,11 @@ let redoIndex=0;
 let imageSrc='';
 const undo= () =>{
   if(memory.length < 1) return message ("undo memory end");
+  $("#load").fadeIn(100);
   drawImage(imageSrc);
 memory.pop();
 setTimeout(()=>{
+ 
 memory.forEach((e)=>{//redraw canvas
   ctx.beginPath();
   e.forEach((el)=>{
@@ -25,7 +27,9 @@ memory.forEach((e)=>{//redraw canvas
   drawLine(el.x,el.y,el.radius,el.color);
 });
 //ctx.closePath();
-})
+});
+$("#load").fadeOut(100);
+  
 },0);
 
  }
@@ -52,10 +56,7 @@ function drawImage(src){
     if(imgW>canvas.width){
       if( !done){
         done=true;
-      swal({title:"this image require a bigger screen",
-      text:"text on this image might not be visible , becouse the image sizes are bigger than your device screen please  view this file next time using a bigger screen",
    
-      });
       }
     }
   ctx.drawImage(img, 0, 0,imgW,imgH);
@@ -180,19 +181,7 @@ $("#text").click(function (){
 });
 
 function erase(){
-  swal({
-    title:"are you want to erase this canvas ? this action will clear all your work !!",
-    text:"restart work gain",
-    buttons:["cancel","Clear"]
-  }).then((e)=>{
-   if(e){
-      imageDetected=false;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-   }
-   else{
-    message ("back again");
-   }
-  })
+  
 }
 
 

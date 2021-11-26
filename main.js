@@ -29,7 +29,7 @@ memory.forEach((e)=>{//redraw canvas
 },0);
 
  }
-
+let done=false;
 ctx.font="15px arial";
 ctx.fillText("EDITOR V 1 , please Choose jpg, png, jpeg image of answer papper ",canvas.width/8,canvas.height/3);
 function drawImage(src){
@@ -50,7 +50,8 @@ function drawImage(src){
    
 
     if(imgW>canvas.height){
-      if( !imageDetected){
+      if( !done){
+        done=true;
       swal({title:"this image require a bigger screen",
       text:"text on this image might not be visible , becouse the image sizes are bigger than your device screen please  view this file next time using a bigger screen",
     buttons:["continue","Noted !"]});

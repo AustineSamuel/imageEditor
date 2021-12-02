@@ -50,14 +50,9 @@ function drawImage(src){
     ctx.clearRect(0,0,canvas.width,canvas.height);
    
     ctx.beginPath();
-   
-if(imgW<canvas.width){
-  ctx.drawImage(img,0,0,imgW,imgH);
-}
-else{
-  document.body.style.overflow="auto";
-  ctx.drawImage(img,0,0,imgW,imgH);
-  }
+  
+  ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  
 
     ctx.closePath();
   img.remove();

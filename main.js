@@ -1,6 +1,7 @@
 let canvas = document.querySelector("canvas");
 canvas.width = innerWidth;
 canvas.height = innerHeight
+const zoom={top:0,left:0}
 
 const PI2 = Math.PI * 2
 const random = (min, max) => Math.random() * (max - min + 1) + min | 0
@@ -42,9 +43,7 @@ function drawImage(src){
   img.onload = () => {
     imgW=img.width;
     imgH=img.height;
-    
-    
-
+  
 
 
 
@@ -52,16 +51,14 @@ function drawImage(src){
    
     ctx.beginPath();
    
+if(imgW<canvas.width){
+  ctx.drawImage(img,0,0,imgW,imgH);
+}
+else{
+  document.body.style.overflow="auto";
+  ctx.drawImage(img,0,0,imgW,imgH);
+  }
 
-    if(imgW>canvas.width){
-      if( !done){
-        done=true;
-   
-      }
-    }
-  ctx.drawImage(img, 0, 0,imgW,imgH);
-
-console.log(imgW,imgH);
     ctx.closePath();
   img.remove();
   }
@@ -149,7 +146,7 @@ memory.push(memoryLine);
  
 setTimeout(() => {
   memoryLine=[];  
-  console.log(memory);
+  
 }, 0);
 });
 
@@ -219,4 +216,7 @@ $("#range").on("change",function(){
 
   $("#show").css("width",thick).css("height",thick).css("border-radius",thick/2);
 
-})
+});
+
+
+
